@@ -1,53 +1,42 @@
 <?php
 
-session_start();
-require_once __DIR__ . '/../../core/Controller.php';
-require_once __DIR__ . '/../../models/User.php';
+class StudentSignup {
 
-class Studentsignup extends Controller {
-    
     public function index() {
-        $this->view('student/studentsignup.view');
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->handleSignup();
+        } else {
+            // Load the signup form view
+            include '../app/views/student/studentsignup.view.php';
+        }
     }
 
-    public function register() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $user_role = 'student';
-            $first_name = $_POST['firstName'];
-            $last_name = $_POST['lastName'];
-            $email = $_POST['email'];
-            $contact_no = $_POST['contactNumber'];
-            $dob = $_POST['dob'];
-            $password = $_POST['password'];
-            $re_password = $_POST['reEnterPassword'];
+    private function handleSignup() {
+        // Retrieve data from the POST request
+        $firstName = $_POST['firstName'];
+        $lastName = $_POST['lastName'];
+        $contactNumber = $_POST['contactNumber'];
+        $email = $_POST['email'];
+        $dob = $_POST['dob'];
+        $password = $_POST['password'];
+        $reEnterPassword = $_POST['reEnterPassword'];
 
-            // Password validation
-            if ($password !== $re_password) {
-                $_SESSION['error_message'] = 'Passwords do not match!';
-                header("Location: " . ROOT . "/student/studentsignup");
-                exit;
-            }
+        // Validate form data
+        if ($password !== $reEnterPassword) {
+            $error_message = 'Passwords do not match!';
+            include '../app/views/student/studentsignup.view.php';
+            return;
+        }
 
-            // Call User model to insert data
-            $userModel = new User();
-            $user_id = $userModel->registerUser($user_role, $first_name, $last_name, $email, $contact_no, $dob, $password);
-
-            if ($user_id) {
-                $_SESSION['user_id'] = $user_id;
-                $_SESSION['user_role'] = $user_role;
-                $_SESSION['email'] = $email;
-                $_SESSION['first_name'] = $first_name;
-                
-                echo "<script>
-                    alert('Registration successful');
-                    window.location.href = '". ROOT ."/login';
-                </script>";
-                exit;
-            } else {
-                $_SESSION['error_message'] = 'An error occurred during registration!';
-                header("Location: " . ROOT . "/student/studentsignup");
-                exit;
-            }
+        // Create an instance of the Student model and save the data
+        $studentModel = new Student();
+        if ($studentModel->saveStudent($firstName, $lastName, $contactNumber, $email, $dob, $password)) {
+            // Redirect to login page or dashboard after successful signup
+            header('Location: ' . ROOT . '/login');
+            exit();
+        } else {
+            $error_message = 'There was an error saving your information. Please try again!';
+            include '../app/views/student/studentsignup.view.php';
         }
     }
 }

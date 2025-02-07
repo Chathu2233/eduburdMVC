@@ -1,46 +1,29 @@
 <?php
 
-trait Database {
+class Database {
+    private static $instance = null;
+    private $pdo;
 
-    private function connect(){
-        $string = "mysql:hostname=".DBHOST."; dbname=".DBNAME;
-        $con =  new PDO($string,DBUSER,DBPASS);
-        return $con;
-
-    }
-
-    public function query($query,$data=[]){
-
-        $con = $this->connect();
-        $stmt = $con->prepare($query);
-
-        $check  = $stmt->execute($data);
-        if($check){
-            $results  = $stmt->fetchAll(PDO::FETCH_OBJ);
-            if(is_array($results) && count($results)){
-                return  $results;
-
-            }
+    private function __construct() {
+        try {
+            $dsn = "mysql:host=localhost;dbname=eduburdmvc;charset=utf8";
+            $this->pdo = new PDO($dsn, "root", "", [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
+            ]);
+        } catch (PDOException $e) {
+            die("Database connection failed: " . $e->getMessage());
         }
-        return  false;
     }
 
-    public function get_row($query,$data=[]){
-
-        $con = $this->connect();
-        $stmt = $con->prepare($query);
-
-        $check  = $stmt->execute($data);
-        if($check){
-            $results  = $stmt->fetchAll(PDO::FETCH_OBJ);
-            if(is_array($results) && count($results)){
-                return  $results[0];
-
-            }
+    public static function getInstance() {
+        if (self::$instance === null) {
+            self::$instance = new Database();
         }
-        return  false;
+        return self::$instance;
     }
 
+    public function getConnection() {
+        return $this->pdo;
+    }
 }
-
-
