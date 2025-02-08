@@ -29,7 +29,7 @@
             </ul>
         </nav>
         <div class="auth-buttons">
-            <a href="p" class="login-btn">Login</a>
+            <a href="<?= ROOT ?>/Login" class="login-btn">Login</a>
             <a href="<?= ROOT ?>/Signupmenu" class="signup-btn">Signup</a>
         </div>
     </header>
