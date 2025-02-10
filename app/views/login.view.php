@@ -65,7 +65,7 @@
         alert(data.message);  // Show response message
 
         if (data.status === 'success') {
-          window.location.href = ROOT;  // Redirect on success
+          window.location.href = ROOT + 'Home';  // Redirect on success
         }
       })
       .catch(error => console.error('Error:', error));  // Catch and log errors
