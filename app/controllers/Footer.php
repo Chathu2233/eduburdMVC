@@ -2,6 +2,7 @@
 
 class Footer
 {
+    use Controller;
     public function index()
     {
         // Render the header_guest.view.php file

@@ -19,31 +19,14 @@ session_start();
     <!-- Header Section -->
   
     <header>
-        <?php
-        // Dynamically include the correct header based on user role
+    <?php
     if (isset($_SESSION['user_role'])) {
-        switch ($_SESSION['user_role']) {
-            case 'admin':
-                include 'header_admin.view.php';
-                break;
-            case 'student':
-                echo "Loading student header...";
-                include 'header_student.view.php';
-                break;
-            case 'tutor':
-                include 'header_tutor.view.php';
-                break;
-            case 'parent':
-                include 'header_parent.view.php';
-                break;
-            default:
-                include 'header_guest.view.php'; // Fallback for unknown roles
-        }
+        $this->view("header_" . $_SESSION['user_role']);
     } else {
-        include 'header_guest.view.php'; // For guests (not logged in)
+        $this->view("header_guest");
     }
-?>
-    </header>
+    ?>
+</header>
 
  <!-- Content Section -->
  <div class="content-wrapper">
@@ -104,7 +87,7 @@ session_start();
         <h2>Personalised A1 & A2 (Advanced Level - Years 1 & 2) Tuition</h2>
         <div class="tuition-content">
             <div class="subject-card">
-                <img src="../assets/images/A2.webp" alt="A2" class="subject-image">
+                <img src="<?=ROOT?>/assets/images/A2.webp" alt="A2" class="subject-image">
             </div>
             <div class="subject-card">
                 <p>In-depth courses designed for specialization and preparation for higher education.
@@ -135,56 +118,6 @@ session_start();
 
 </div>
 
- <!-- Footer Section -->
- <footer>
-        <div class="footer-container">
-            <!-- Logo and Description -->
-            <div class="footer-logo">
-                <img src="../assets/images/Modern Marketing Cover Page Document .png" alt="EduBurd Logo">
-                <p>Empowering learners with top-quality tutoring across a variety of subjects and levels. Join us to enhance your learning journey.</p>
-            </div>
-
-            <!-- Footer Links -->
-            <div class="footer-links">
-                <div class="footer-section">
-                    <h4>Get Help</h4>
-                    <ul>
-                        <li><a href="/contact">Contact Us</a></li>
-                        <li><a href="/aboutus">About Us</a></li>
-                    
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Programs</h4>
-                    <ul>
-                        <li><a href="/programs/primary">Primary</a></li>
-                        <li><a href="/programs/secondary">Secondary</a></li>
-                        <li><a href="/programs/igcse">IGCSE</a></li>
-                        <li><a href="/programs/as&a2">AS & A2</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section" id="contact">
-                    <h4>Contact</h4>
-                    <ul>
-                        <li>Address: UCSC Building Complex, 35 Reid Ave, Colombo 00700 </li>
-                        <li>Email: support@eduburd.com</li>
-                        <li>Phone: +94 761 166 329</li>
-                    </ul>
-                </div>
-
-                <!-- Social Media Links -->
-                <div class="footer-social">
-                    <a href="#"><img src="../assets/images/facebook.png" alt="Facebook"></a>
-                    <a href="#"><img src="../assets/images/twitter.png" alt="Twitter"></a>
-                    <a href="#"><img src="../assets/images/instagram.png" alt="Instagram"></a>
-                    <a href="#"><img src="../assets/images/linkedin.png" alt="LinkedIn"></a>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>© 2024 EduBurd | All Rights Reserved</p>
-        </div>
-    </footer>
+<?php $this->view('footer'); ?>
 </body>
 </html>

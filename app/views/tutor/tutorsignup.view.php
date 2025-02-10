@@ -53,9 +53,7 @@
     </div>
 </main>
 
-<footer>
-    <?php include '../footer.view.php'; ?>
-</footer>
+<?php $this->view('footer'); ?>
 
 </body>
 </html>

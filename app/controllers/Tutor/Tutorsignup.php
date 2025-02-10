@@ -1,10 +1,13 @@
 <?php
 
-class TutorSignup
+require_once '../app/core/Controller.php'; // Include the base controller
+
+class TutorSignup    // Extend Controller
 {
+    use Controller;
     public function index()
     {
-        require_once '../app/views/Tutor/tutorsignup.view.php';
+        $this->view('tutor/tutorsignup');  // Now it works!
     }
 
     public function register()

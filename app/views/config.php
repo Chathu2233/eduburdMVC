@@ -2,7 +2,7 @@
 if($_SERVER['SERVER_NAME'] == 'localhost')
 {
     /*database config*/
-    define('DBNAME', 'eduburd');
+    define('DBNAME', 'eduburdMVC');
     define('DBHOST', 'localhost');
     define('DBUSER', 'root');
     define('DBPASS','');
