@@ -11,7 +11,7 @@ class User {
         $this->pdo = $this->connect(); // 🔥 Call the trait's `connect()` method
     }
 
-    public function registerUser($user_role, $first_name, $last_name, $email, $contact_no, $dob, $password) {
+    public function registerUser($role, $first_name, $last_name, $email, $contact_no, $dob, $password) {
         $stmt = $this->pdo->prepare("SELECT * FROM user WHERE email = ?");
         $stmt->execute([$email]);
 
