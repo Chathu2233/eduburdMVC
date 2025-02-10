@@ -19,11 +19,11 @@
         </div>
         <nav>
             <ul>
-                <li><a href="/views/home.php">Home</a></li>
-                <li><a href="/views/findatutor.php">Find A Tutor</a></li>
-                <li><a href="/views/tutor/tutorsignup.php">Become A Tutor</a></li>
-                <li><a href="/views/aboutus.php">About Us</a></li>
-                <li><a href="/views/student/stu_dashboard.php">My Dashboard</a></li>
+                <li><a href="<?= ROOT ?>/Home">Home</a></li>
+                <li><a href="<?= ROOT ?>findatutor>Find A Tutor</a></li>
+                <li><a href="<?= ROOT ?>tutorsignup">Become A Tutor</a></li>
+                <li><a href="<?= ROOT ?>aboutus">About Us</a></li>
+                <li><a href="<?= ROOT ?>stu_dashboard">My Dashboard</a></li>
             </ul>
         </nav>
         <div class="auth-buttons">

@@ -3,24 +3,28 @@
 class Student {
     use Database; // ✅ Include the trait
 
-    public function saveStudent($firstName, $lastName, $contactNumber, $email, $dob, $password) {
+    public function saveStudent($firstName, $lastName, $contactNumber, $email, $dob, $password, $userId) {
         try {
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $query = "INSERT INTO student (first_name, last_name, contact_number, email, dob, password) 
-                      VALUES (:firstName, :lastName, :contactNumber, :email, :dob, :password)";
-
+            // Prepare the data to insert
             $data = [
-                ':firstName' => $firstName,
-                ':lastName' => $lastName,
-                ':contactNumber' => $contactNumber,
-                ':email' => $email,
-                ':dob' => $dob,
-                ':password' => $hashedPassword
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'contact_number' => $contactNumber,
+                'email' => $email,
+                'dob' => $dob,
+                'password' => $password,
+                'user_id' => $userId // ✅ Ensure foreign key is added
             ];
-
-            return $this->query($query, $data);
+    
+            // Call insert function
+            if ($this->insert('student', $data)) {
+                return true;
+            } else {
+                return false;
+            }
+    
         } catch (PDOException $e) {
-            return false;
+            die("Insert failed: " . $e->getMessage());
         }
     }
 }

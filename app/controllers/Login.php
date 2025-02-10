@@ -3,32 +3,59 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-require_once __DIR__ . "/../models/User.php";
 
 class Login {
+
     public function index() {
-        require_once __DIR__ . "/../views/login.view.php";
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->handleLogin();
+        } else {
+            // Show the login view
+            include '../app/views/login.view.php';
+        }
     }
 
-    public function authenticate() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['email'];
-            $password = $_POST['password'];
+    private function handleLogin() {
+        // Retrieve data from the POST request
+        $email = $_POST['email'];
+        $password = $_POST['password'];
 
-            $userModel = new User();
-            $user = $userModel->getUserByEmail($email);
+        // Create an instance of the User model and check login credentials
+        $userModel = new User();
 
-            if ($user && password_verify($password, $user['password'])) {
-                $_SESSION['user_id'] = $user['user_id'];
-                $_SESSION['user_email'] = $user['email'];
-                $_SESSION['user_role'] = $user['user_role'];
+        $user = $userModel->getUserByEmail($email);
 
-                echo json_encode(['status' => 'success', 'message' => 'Login successfull']);
+        $response = [];
+
+        if ($user) {
+            // Verify password
+            if (password_verify($password, $user['password'])) {
+                // Start session and store user data (logged-in session)
+                session_start();
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['email'] = $user['email'];
+                $_SESSION['role'] = $user['role']; // Store role for access control
+
+                
+                // Respond with success
+                $response['status'] = 'success';
+                $response['message'] = 'Login successful!';
+                echo json_encode($response);
+                exit();
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Invalid email or password']);
+                // Invalid password
+                $response['status'] = 'error';
+                $response['message'] = 'Invalid credentials!';
+                echo json_encode($response);
+                exit();
             }
-            exit;
+        } else {
+            // User not found
+            $response['status'] = 'error';
+            $response['message'] = 'User does not exist!';
+            echo json_encode($response);
+            exit();
         }
     }
 }
-?>
+

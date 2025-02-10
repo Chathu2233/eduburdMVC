@@ -36,41 +36,40 @@
   </div>
 
   <script>
-  // Fix Password Toggle
-  document.getElementById('togglePassword').addEventListener('click', function () {
-    let passwordInput = document.getElementById('password');
-    let type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-    this.classList.toggle('bxs-lock-alt');
-    this.classList.toggle('bxs-lock-open-alt');
-  });
+    // Fix Password Toggle
+    document.getElementById('togglePassword').addEventListener('click', function () {
+      let passwordInput = document.getElementById('password');
+      let type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      this.classList.toggle('bxs-lock-alt');
+      this.classList.toggle('bxs-lock-open-alt');
+    });
 
-  // Ensure correct ROOT path for redirection
-  const ROOT = "../../views/";  // Change this based on your structure
+    // Ensure correct ROOT path for redirection
+    const ROOT = "<?= ROOT ?>";  // Corrected ROOT usage
 
-  document.getElementById('loginForm').addEventListener('submit', function(event) {
-    event.preventDefault();  // Prevent default form submission
-    console.log("Login form submitted");  // Debugging
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault();  // Prevent default form submission
+      console.log("Login form submitted");  // Debugging
 
-    let formData = new FormData(this);
+      let formData = new FormData(this);
 
-    fetch('<?= ROOT ?>/app/controllers/Home.php?action=authenticate', {
-      method: 'POST',
-      body: formData
-    })
-    .then(response => {
-      console.log("Response received:", response);  // Debugging
-      return response.json();
-    })
-    .then(data => {
-      console.log("Data received:", data);  // Debugging
+      fetch('<?= ROOT ?>/login/authenticate', {  // Use correct URL for authentication
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())  // Parse response as JSON
+      .then(data => {
+        console.log("Data received:", data);  // Debugging
 
-      alert(data.message);
+        alert(data.message);  // Show response message
 
-      if (data.status === 'success') {
-        window.location.href = ROOT;  // Redirect on success
-      }
-    })
-    .catch(error => console.error('Error:', error));
-  });
-</script>
+        if (data.status === 'success') {
+          window.location.href = ROOT;  // Redirect on success
+        }
+      })
+      .catch(error => console.error('Error:', error));  // Catch and log errors
+    });
+  </script>
+</body>
+</html>
