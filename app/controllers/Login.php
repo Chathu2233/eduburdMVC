@@ -1,4 +1,8 @@
 <?php
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once __DIR__ . "/../models/User.php";
 
 class Login {
@@ -19,7 +23,7 @@ class Login {
                 $_SESSION['user_email'] = $user['email'];
                 $_SESSION['user_role'] = $user['user_role'];
 
-                echo json_encode(['status' => 'success', 'message' => 'Login successful']);
+                echo json_encode(['status' => 'success', 'message' => 'Login successfull']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Invalid email or password']);
             }

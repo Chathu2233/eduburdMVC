@@ -31,11 +31,12 @@
       <button type="submit" class="btn">Login</button>
     </form>
     <div class="register-link">
-      <p>Don't have an account? <a href="signupmenu.php">Register</a></p>
+      <p>Don't have an account? <a href="<?= ROOT ?>/Signupmenu">Register</a></p>
     </div>
   </div>
 
-<script>
+  <script>
+  // Fix Password Toggle
   document.getElementById('togglePassword').addEventListener('click', function () {
     let passwordInput = document.getElementById('password');
     let type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -44,22 +45,32 @@
     this.classList.toggle('bxs-lock-open-alt');
   });
 
+  // Ensure correct ROOT path for redirection
+  const ROOT = "../../views/";  // Change this based on your structure
+
   document.getElementById('loginForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    fetch('../../app/controllers/Login.php?action=authenticate', {
+    event.preventDefault();  // Prevent default form submission
+    console.log("Login form submitted");  // Debugging
+
+    let formData = new FormData(this);
+
+    fetch('<?= ROOT ?>/app/controllers/Home.php?action=authenticate', {
       method: 'POST',
-      body: new FormData(this)
+      body: formData
     })
-    .then(response => response.json())
+    .then(response => {
+      console.log("Response received:", response);  // Debugging
+      return response.json();
+    })
     .then(data => {
+      console.log("Data received:", data);  // Debugging
+
       alert(data.message);
+
       if (data.status === 'success') {
-        window.location.href = 'home.php';
+        window.location.href = ROOT;  // Redirect on success
       }
     })
     .catch(error => console.error('Error:', error));
   });
 </script>
-
-</body>
-</html>
