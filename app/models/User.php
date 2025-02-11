@@ -17,13 +17,11 @@ class User {
 
         if ($stmt->rowCount() > 0) {
             return false; // Email already exists
-        }
 
-        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
        // Insert the user data into the `user` table
     $stmt = $this->pdo->prepare("INSERT INTO user (role, first_name, last_name, email, password, created_at, updated_at) 
     VALUES (?, ?, ?, ?, ?, NOW(), NOW())");
-   if ($stmt->execute([$role, $first_name, $last_name, $email, $hashed_password])) {
+   if ($stmt->execute([$role, $first_name, $last_name, $email, $password])) {
    // Return the user_id after successful insertion
     return $this->pdo->lastInsertId();
 }
@@ -39,5 +37,6 @@ class User {
         
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+}
 }
     
