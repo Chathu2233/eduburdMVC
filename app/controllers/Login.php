@@ -10,15 +10,15 @@ class Login {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->handleLogin();
         } else {
-            // Show the login view
+            // Show the login view (for the GET request)
             include '../app/views/login.view.php';
         }
     }
 
     private function handleLogin() {
         // Retrieve data from the POST request
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+        $email = $_POST['email'] ?? '';  // Use null coalescing to handle missing POST data
+        $password = $_POST['password'] ?? '';
 
         // Create an instance of the User model and check login credentials
         $userModel = new User();
@@ -31,31 +31,29 @@ class Login {
             // Verify password
             if (password_verify($password, $user['password'])) {
                 // Start session and store user data (logged-in session)
-                session_start();
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['role'] = $user['role']; // Store role for access control
 
-                
                 // Respond with success
                 $response['status'] = 'success';
                 $response['message'] = 'Login successful!';
-                echo json_encode($response);
+                echo json_encode($response);  // Return JSON response for API
                 exit();
             } else {
                 // Invalid password
                 $response['status'] = 'error';
                 $response['message'] = 'Invalid credentials!';
-                echo json_encode($response);
+                echo json_encode($response);  // Return JSON response for API
                 exit();
             }
         } else {
             // User not found
             $response['status'] = 'error';
             $response['message'] = 'User does not exist!';
-            echo json_encode($response);
+            echo json_encode($response);  // Return JSON response for API
             exit();
         }
     }
 }
-
+?>
