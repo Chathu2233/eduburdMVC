@@ -1,13 +1,13 @@
 <?php
 
-class AdminDashboard
+class ManageTutors
 
 {
     use Controller;
     public function index()
     {
         // Render the "add new case" view with an empty errors array
-        $this->view('/admin/admindashboard');
+        $this->view('/admin/managetutors');
     }
 
     private function view($viewName)

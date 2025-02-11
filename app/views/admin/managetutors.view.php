@@ -63,9 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
 <header >
-    <?php
-    include '../header_admin.php'
-    ?>
+<?php include '../app/views/header_admin.view.php'; ?>
     </header>
 
 <div class="manage-container">
