@@ -31,7 +31,7 @@
         </a>
     </div>
     </div>
-    <?php include 'footer.php'; ?> 
+    <?php $this->view('footer'); ?>
 
 </body>
 </html>

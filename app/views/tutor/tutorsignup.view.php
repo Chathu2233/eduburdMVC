@@ -46,7 +46,7 @@
                 <label for="cv-upload">Upload Your CV:</label>
                 <input type="file" id="cv-upload" name="cv" accept=".pdf,.doc,.docx" required>
 
-                <button type="submit">Submit</button>
+                <button type="submit-">Submit</button>
                 <button type="reset">Cancel</button>
             </form>
         </div>
