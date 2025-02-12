@@ -28,12 +28,12 @@ class StudentSignup {
             return;
         }
 
-        // Secure hashing
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+        // Secure hashing (Uncomment below for security)
+        // $password = password_hash($password, PASSWORD_BCRYPT);
 
-        // Insert user data
+        // First, insert user into `user` table
         $userModel = new User();
-        $userId = $userModel->registerUser('student', $firstName, $lastName, $email, $contactNumber, $dob, $hashedPassword);
+        $userId = $userModel->registerUser('student', $firstName, $lastName, $email, $contactNumber, $dob, $password); // Adjust as per your `user` table
 
         if (!$userId) {
             $error_message = 'Error creating user account!';
@@ -41,12 +41,11 @@ class StudentSignup {
             return;
         }
 
-        // Insert student data
-        $studentModel = new Student();
-        $isStudentSaved = $studentModel->saveStudent($userId, $firstName, $lastName, $contactNumber, $email, $dob);
+        // Now, insert student using `user_id`
+        $StudentModel = new StudentModel(); // fixed
 
-        if ($isStudentSaved) {
-            // Redirect to login after successful signup
+        if ($StudentModel->saveStudent($userId)) { 
+            // Redirect to login page after successful signup
             header('Location: ' . ROOT . '/login');
             exit();
         } else {

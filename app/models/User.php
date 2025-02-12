@@ -1,49 +1,59 @@
 <?php
 
-class User {
+require_once __DIR__ . '/../core/Database.php';
 
-    private $db;
+class User {
+    use Database; // Use the trait instead of instantiating it
+
+    private $pdo;
 
     public function __construct() {
-        $this->db = new class {
-            use Database; // Use the Database trait inside an anonymous class
-        };
+        $this->pdo = $this->connect(); // Call the trait's `connect()` method
     }
 
-    public function registerUser($role, $firstName, $lastName, $email, $contactNumber, $dob, $password) {
-        try {
-            $query = "INSERT INTO user (role, first_name, last_name, email, contact_number, dob, password) 
-                      VALUES (:role, :firstName, :lastName, :email, :contactNumber, :dob, :password)";
-            $stmt = $this->db->connect()->prepare($query); // Use the connect() method to get PDO instance
+    // Register a new user
+    public function registerUser($role, $first_name, $last_name, $email, $contact_no, $dob, $password) {
+        $stmt = $this->pdo->prepare("SELECT * FROM user WHERE email = ?");
+        $stmt->execute([$email]);
 
-            $stmt->bindParam(':role', $role);
-            $stmt->bindParam(':firstName', $firstName);
-            $stmt->bindParam(':lastName', $lastName);
-            $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':contactNumber', $contactNumber);
-            $stmt->bindParam(':dob', $dob);
-            $stmt->bindParam(':password', $password);
-
-            $stmt->execute();
-
-            // Return the last inserted user id
-            return $this->db->connect()->lastInsertId();
-        } catch (PDOException $e) {
-            error_log("Error in registerUser: " . $e->getMessage());
-            return false;
+        if ($stmt->rowCount() > 0) {
+            return false; // Email already exists
         }
+
+        // Hash the password for security
+        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+
+        // Insert the user data into the `user` table
+        $stmt = $this->pdo->prepare("INSERT INTO user (user_role, first_name, last_name, email, dob, contact_no, password) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)");
+        
+        if ($stmt->execute([$role, $first_name, $last_name, $email, $dob, $contact_no, $hashed_password])) {
+            return $this->pdo->lastInsertId(); // Return the user ID if insertion is successful
+        }
+
+        return false; // Return false if insertion fails
     }
 
+    // Get user details by email
     public function getUserByEmail($email) {
-        try {
-            $query = "SELECT * FROM user WHERE email = :email LIMIT 1";
-            $stmt = $this->db->connect()->prepare($query);
-            $stmt->bindParam(':email', $email);
-            $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            error_log("Error in getUserByEmail: " . $e->getMessage());
-            return false;
+        $query = "SELECT * FROM user WHERE email = :email LIMIT 1";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+        
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // Login a user
+    public function loginUser($email, $password) {
+        $user = $this->getUserByEmail($email);
+        
+        if ($user) {
+            if (password_verify($password, $user['password'])) {
+                return $user; // Successful login
+            }
         }
+        
+        return false; // Failed login
     }
 }
