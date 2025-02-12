@@ -12,15 +12,13 @@ session_start();
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../assets/css/Tutor/navbar.css">
-    <link rel="stylesheet" href="../../assets/css/Tutor/addassignment.css">
-    <link rel="stylesheet" href="../../assets/css/footer.css">
+    <link rel="stylesheet" href="<?= ROOT?>/assets/css/Tutor/addassignment.css">
+    <link rel="stylesheet" href="<?= ROOT?>/assets/css/Tutor/footer.css">
 </head>
 <body>
-    <header >
-    <?php
-    include '../header_tutor.php'
-    ?>
-    </header>
+<header>
+<?php include __DIR__ . '/../header_tutor.view.php'; ?>
+</header>
 
     <!-- Add assignment Section -->
     <main class="add-assignment-page">
@@ -48,5 +46,5 @@ session_start();
         </section>
     </main>
 
-    <?php include '../footer.php'; ?>
+    <?php include __DIR__ . '/../footer.view.php'; ?>
 </body>
