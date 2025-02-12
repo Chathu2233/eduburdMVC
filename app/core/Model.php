@@ -75,11 +75,6 @@ trait Model
         $query = "INSERT INTO $this->table (" . implode(",", $keys) . ") VALUES (:" . implode(",:", $keys) . ")";
         return $this->query($query, $data);
     }
-<<<<<<< HEAD
-}
-<<<<<<< HEAD
-=======
->>>>>>> 0b70bb37ab2223785511e47eeda096f9155e9fdf
 
 
 //dont change
