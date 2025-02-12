@@ -22,7 +22,7 @@
                 <li><a href="/views/findatutor.php">Find A Tutor</a></li>
                 <li><a href="/views/Tutor/tutorsignup.php">Become A Tutor</a></li>
                 <li><a href="/views/aboutus.php">About Us</a></li>
-                <li><a href="/views/admin/admindashboard.php">My Dashboard</a></li>
+                <li><a href="/views/admin/admindashboard1.php">My Dashboard</a></li>
             </ul>
         </nav>
         <div class="auth-buttons">
