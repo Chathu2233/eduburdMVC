@@ -105,13 +105,10 @@ Trait Model
         $query = "INSERT INTO $this->table (" . implode(",", $keys) . ") VALUES (:" . implode(",:", $keys) . ")";
         return $this->query($query, $data);
     }
-<<<<<<< HEAD
 
 
 
 
-=======
->>>>>>> 755557984712588f6bcd476e8c13821a2b177286
 
     /**
      * Update an existing record by ID
@@ -159,8 +156,6 @@ Trait Model
         return $this->query($query, $data);
     }
 }
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 755557984712588f6bcd476e8c13821a2b177286
+
