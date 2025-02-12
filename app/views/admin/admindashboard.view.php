@@ -29,7 +29,7 @@
             <div class="card manage-tutors">
                 <h3>Manage Tutors</h3>
                 <p>View, add, edit, or delete tutors.</p>
-                <a href="managetutors1.php" class="button">Go to Tutors</a>
+                <a href="managetutors.php" class="button">Go to Tutors</a>
             </div>
             <div class="card manage-students">
                 <h3>Manage Students</h3>
