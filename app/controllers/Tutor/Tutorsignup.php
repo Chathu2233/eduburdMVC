@@ -1,69 +1,69 @@
 <?php
 
-require_once '../app/core/Controller.php'; // Include the base controller
+class TutorSignup {
 
-class TutorSignup    // Extend Controller
-{
-    use Controller;
-    public function index()
-    {
-        $this->view('tutor/tutorsignup');  // Now it works!
+    public function index() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->handleSignup();
+        } else {
+            // Load the signup form view
+            include '../app/views/tutor/tutorsignup.view.php';
+        }
     }
 
-    public function register()
-    {
-        require_once '../app/core/Database.php';
-        $db = new Database();
-        $pdo = $db->connect();
+    private function handleSignup() {
+        // Retrieve data from the POST request
+        $firstName = $_POST['firstName'];
+        $lastName = $_POST['lastName'];
+        $contactNumber = $_POST['contactNumber'];
+        $email = $_POST['email'];
+        $dob = $_POST['dob'];
+        $password = $_POST['password'];
+        $reEnterPassword = $_POST['reEnterPassword'];
+        $YearsofExperience = $_POST['YearsofExperience'];
+    
+        // Handle file upload for CV
+        if (isset($_FILES['UploadYourCV']) && $_FILES['UploadYourCV']['error'] == 0) {
+            $cvTmpName = $_FILES['UploadYourCV']['tmp_name'];
+            $cvName = $_FILES['UploadYourCV']['name'];
+            $cvPath = '../app/views/tutor/uploads/' . $cvName;  // Save the uploaded file in the 'uploads/cvs' directory
+    
+            // Move the uploaded CV to the desired location
+            move_uploaded_file($cvTmpName, $cvPath);
+        } else {
+            // Handle error or missing file
+            $cvPath = null;  // Or set to a default if required
+        }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $user_role = $_POST['user_role'];
-            $first_name = $_POST['firstName'];
-            $last_name = $_POST['lastName'];
-            $email = $_POST['email'];
-            $contact_no = $_POST['contactNumber'];
-            $dob = $_POST['dob'];
-            $password = $_POST['password'];
-            $re_password = $_POST['reEnterPassword'];
-            $years_of_experience = $_POST['years_of_experience'];
+        // Validate form data
+        if ($password !== $reEnterPassword) {
+            $error_message = 'Passwords do not match!';
+            include '../app/views/tutor/tutorsignup.view.php';
+            return;
+        }
 
-            // Handle CV upload
-            $cv_upload_path = null;
-            if (isset($_FILES['cv']) && $_FILES['cv']['error'] === UPLOAD_ERR_OK) {
-                $cv_tmp_path = $_FILES['cv']['tmp_name'];
-                $cv_name = basename($_FILES['cv']['name']);
-                $cv_upload_path = '../public/uploads/' . $cv_name;
+        // Hash the password
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-                move_uploaded_file($cv_tmp_path, $cv_upload_path);
-            }
+        // First, insert user into `user` table
+        $userModel = new User();
+        $userId = $userModel->registerUser('tutor', $firstName, $lastName, $email, $contactNumber, $dob, $hashedPassword);
 
-            if ($password !== $re_password) {
-                echo json_encode(['status' => 'error', 'message' => 'Passwords do not match']);
-                exit;
-            }
+        if (!$userId) {
+            $error_message = 'Error creating user account!';
+            include '../app/views/tutor/tutorsignup.view.php';
+            return;
+        }
 
-            require_once '../app/models/Tutor.php';
-            $tutor = new Tutor($pdo);
-
-            if ($tutor->isEmailExists($email)) {
-                echo json_encode(['status' => 'error', 'message' => 'Email already exists']);
-                exit;
-            }
-
-            $user_id = $tutor->registerUser($user_role, $first_name, $last_name, $email, $contact_no, $dob, $password);
-            $tutor->registerTutor($user_id, $years_of_experience, $cv_upload_path);
-
-            session_start();
-            $_SESSION['user_id'] = $user_id;
-            $_SESSION['user_role'] = $user_role;
-            $_SESSION['email'] = $email;
-            $_SESSION['first_name'] = $first_name;
-
-            echo "<script>
-                alert('Registration successful');
-                window.location.href = '../login.view.php';
-              </script>";
-            exit;
+        // Now, insert tutor using `user_id`
+        $tutorModel = new TutorModel();
+        if ($tutorModel->saveTutor($userId, $YearsofExperience, $cvPath)) {
+            // Redirect to login page after successful signup
+            header('Location: ' . ROOT . '/login');
+            exit();
+        } else {
+            $error_message = 'There was an error saving your information. Please try again!';
+            include '../app/views/tutor/tutorsignup.view.php';
         }
     }
 }
