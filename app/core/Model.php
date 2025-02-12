@@ -106,10 +106,6 @@ Trait Model
         return $this->query($query, $data);
     }
 
-
-
-
-
     /**
      * Update an existing record by ID
      *
@@ -156,6 +152,3 @@ Trait Model
         return $this->query($query, $data);
     }
 }
-
-
-
