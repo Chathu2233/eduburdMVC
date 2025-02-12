@@ -8,7 +8,7 @@ class User {
     private $pdo;
 
     public function __construct() {
-        $this->pdo = Database::getInstance()->getConnection(); // Fix: Use getInstance()
+        $this->pdo = $this->connect(); // Call the trait's `connect()` method
     }
 
     // Register a new user
