@@ -75,7 +75,19 @@ trait Model
         $query = "INSERT INTO $this->table (" . implode(",", $keys) . ") VALUES (:" . implode(",:", $keys) . ")";
         return $this->query($query, $data);
     }
+<<<<<<< HEAD
 
+=======
+//dont change
+    /**
+     * Update an existing record by ID
+     *
+     * @param int $id The ID of the record to update
+     * @param array $data Data to update
+     * @param string $id_column The column to use for the WHERE clause
+     * @return bool
+     */
+>>>>>>> Farshad
     public function update($id, $data, $id_column = 'id')
     {
         if (!empty($this->allowedColumns)) {
