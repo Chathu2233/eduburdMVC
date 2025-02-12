@@ -1,59 +1,34 @@
 <?php
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 class Login {
 
     public function index() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handleLogin();
+            $this->authenticate();
         } else {
-            // Show the login view (for the GET request)
             include '../app/views/login.view.php';
         }
     }
 
-    private function handleLogin() {
-        // Retrieve data from the POST request
-        $email = $_POST['email'] ?? '';  // Use null coalescing to handle missing POST data
-        $password = $_POST['password'] ?? '';
+    private function authenticate() {
+        $email = $_POST['email'];
+        $password = $_POST['password'];
 
-        // Create an instance of the User model and check login credentials
+        // Check if user exists and validate password
         $userModel = new User();
-
         $user = $userModel->getUserByEmail($email);
 
-        $response = [];
+        if ($user && password_verify($password, $user['password'])) {
+            session_start();
+            $_SESSION['user_id'] = $user['user_id'];
+            $_SESSION['role'] = $user['role'];
 
-        if ($user) {
-            // Verify password
-            if (password_verify($password, $user['password'])) {
-                // Start session and store user data (logged-in session)
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['email'] = $user['email'];
-                $_SESSION['role'] = $user['role']; // Store role for access control
-
-                // Respond with success
-                $response['status'] = 'success';
-                $response['message'] = 'Login successful!';
-                echo json_encode($response);  // Return JSON response for API
-                exit();
-            } else {
-                // Invalid password
-                $response['status'] = 'error';
-                $response['message'] = 'Invalid credentials!';
-                echo json_encode($response);  // Return JSON response for API
-                exit();
-            }
-        } else {
-            // User not found
-            $response['status'] = 'error';
-            $response['message'] = 'User does not exist!';
-            echo json_encode($response);  // Return JSON response for API
+            // Redirect to homepage or dashboard
+            header('Location: ' . ROOT . '/home');
             exit();
+        } else {
+            $error_message = 'Invalid email or password!';
+            include '../app/views/login.view.php';
         }
     }
 }
-?>

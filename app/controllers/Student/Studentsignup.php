@@ -28,25 +28,25 @@ class StudentSignup {
             return;
         }
 
-        // Secure hashing (Uncomment below for security)
-        // $password = password_hash($password, PASSWORD_BCRYPT);
+        // Secure hashing
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-        // ✅ First, insert user into `user` table
+        // Insert user data
         $userModel = new User();
-        $userId = $userModel->registerUser('student', $firstName, $lastName, $email, $contactNumber, $dob, $password); // Adjust as per your `user` table
+        $userId = $userModel->registerUser('student', $firstName, $lastName, $email, $contactNumber, $dob, $hashedPassword);
 
         if (!$userId) {
-            // Log the error to see if the user insertion failed
-            error_log("Failed to create user for email: " . $email);
             $error_message = 'Error creating user account!';
             include '../app/views/student/studentsignup.view.php';
             return;
         }
 
-        // ✅ Now, insert student using `user_id`
+        // Insert student data
         $studentModel = new Student();
-        if ($studentModel->saveStudent($firstName, $lastName, $contactNumber, $email, $dob, $password, $userId)) { 
-            // Redirect to login page after successful signup
+        $isStudentSaved = $studentModel->saveStudent($userId, $firstName, $lastName, $contactNumber, $email, $dob);
+
+        if ($isStudentSaved) {
+            // Redirect to login after successful signup
             header('Location: ' . ROOT . '/login');
             exit();
         } else {

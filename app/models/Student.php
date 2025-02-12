@@ -1,30 +1,30 @@
 <?php
 
 class Student {
-    use Database; // ✅ Include the trait
 
-    public function saveStudent($firstName, $lastName, $contactNumber, $email, $dob, $password, $userId) {
+    private $db;
+
+    public function __construct() {
+        $this->db = Database::getInstance();
+    }
+
+    public function saveStudent($userId, $firstName, $lastName, $contactNumber, $email, $dob) {
         try {
-            // Prepare the data to insert
-            $data = [
-                'first_name' => $firstName,
-                'last_name' => $lastName,
-                'contact_number' => $contactNumber,
-                'email' => $email,
-                'dob' => $dob,
-                'password' => $password,
-                'user_id' => $userId // ✅ Ensure foreign key is added
-            ];
-    
-            // Call insert function
-            if ($this->insert('student', $data)) {
-                return true;
-            } else {
-                return false;
-            }
-    
+            $query = "INSERT INTO student (user_id, first_name, last_name, contact_number, email, dob)
+                      VALUES (:userId, :firstName, :lastName, :contactNumber, :email, :dob)";
+            $stmt = $this->db->prepare($query);
+
+            $stmt->bindParam(':userId', $userId);
+            $stmt->bindParam(':firstName', $firstName);
+            $stmt->bindParam(':lastName', $lastName);
+            $stmt->bindParam(':contactNumber', $contactNumber);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':dob', $dob);
+
+            return $stmt->execute();
         } catch (PDOException $e) {
-            die("Insert failed: " . $e->getMessage());
+            error_log("Error in saveStudent: " . $e->getMessage());
+            return false;
         }
     }
 }
