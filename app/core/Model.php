@@ -75,6 +75,7 @@ trait Model
         $query = "INSERT INTO $this->table (" . implode(",", $keys) . ") VALUES (:" . implode(",:", $keys) . ")";
         return $this->query($query, $data);
     }
+}
 <<<<<<< HEAD
 
 =======
@@ -118,3 +119,4 @@ trait Model
         return $this->query($query, $data);
     }
 }
+
