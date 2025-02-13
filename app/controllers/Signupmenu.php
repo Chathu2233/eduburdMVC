@@ -2,10 +2,14 @@
 
 class Signupmenu
 {
+    use controller;
+
+    
     public function index()
     {
         // Render the header_guest.view.php file
-        $this->view("signupmenu");
+        $data = [];
+        $this->view("signupmenu",$data);
     }
 
     private function view($viewName)

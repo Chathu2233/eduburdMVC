@@ -1,12 +1,13 @@
 <?php
 
-class Footer
+class AdminDashboard
+
 {
     use Controller;
     public function index()
     {
-        // Render the header_guest.view.php file
-        $this->view("footer");
+        // Render the "add new case" view with an empty errors array
+        $this->view('/admin/admindashboard');
     }
 
     private function view($viewName)

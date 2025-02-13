@@ -28,10 +28,24 @@ class StudentSignup {
             return;
         }
 
-        // Create an instance of the Student model and save the data
-        $studentModel = new Student();
-        if ($studentModel->saveStudent($firstName, $lastName, $contactNumber, $email, $dob, $password)) {
-            // Redirect to login page or dashboard after successful signup
+        // Secure hashing (Uncomment below for security)
+        // $password = password_hash($password, PASSWORD_BCRYPT);
+
+        // First, insert user into `user` table
+        $userModel = new User();
+        $userId = $userModel->registerUser('student', $firstName, $lastName, $email, $contactNumber, $dob, $password); // Adjust as per your `user` table
+
+        if (!$userId) {
+            $error_message = 'Error creating user account!';
+            include '../app/views/student/studentsignup.view.php';
+            return;
+        }
+
+        // Now, insert student using `user_id`
+        $StudentModel = new StudentModel(); // fixed
+
+        if ($StudentModel->saveStudent($userId)) { 
+            // Redirect to login page after successful signup
             header('Location: ' . ROOT . '/login');
             exit();
         } else {

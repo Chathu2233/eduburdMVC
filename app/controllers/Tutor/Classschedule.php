@@ -1,12 +1,11 @@
 <?php
 
-class Footer
+class Classschedule
 {
-    use Controller;
     public function index()
     {
-        // Render the header_guest.view.php file
-        $this->view("footer");
+        
+        $this->view("/tutor/classschedule");
     }
 
     private function view($viewName)

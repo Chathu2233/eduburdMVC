@@ -1,12 +1,14 @@
 <?php
 
-class Footer
+class Tutor_dashboard
 {
+
     use Controller;
+    
     public function index()
     {
-        // Render the header_guest.view.php file
-        $this->view("footer");
+        
+        $this->view("/tutor/tutor_dashboard");
     }
 
     private function view($viewName)

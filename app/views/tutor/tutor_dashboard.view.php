@@ -1,11 +1,11 @@
 <?php
-session_start();
 
-if (!isset($_SESSION['user_id'])) {
-    // Redirect to login page if not logged in
-    header("Location: ../login.php");
-    exit();
-}
+
+// if (!isset($_SESSION['user_id'])) {
+//     // Redirect to login page if not logged in
+//     header("Location: ../login.php");
+//     exit();
+// }
 ?>
 
 <!DOCTYPE html>
@@ -16,20 +16,18 @@ if (!isset($_SESSION['user_id'])) {
     <title>Tutor Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../assets/css/Tutor/navbar.css">
-    <link rel="stylesheet" href="../../assets/css/footer.css">
-    <link rel="stylesheet" href="../../assets/css/Tutor/tutor_dashboard.css">
+    <link rel="stylesheet" href="<?= ROOT?>/assets/css/Tutor/navbar.css">
+    <link rel="stylesheet" href="<?= ROOT?>/assets/css/Tutor/footer.css">
+    <link rel="stylesheet" href="<?= ROOT?>/assets/css/Tutor/tutor_dashboard.css">
 </head>
 <body>
-<header >
-    <?php
-    include '../header_tutor.php'
-    ?>
-    </header>
+<header>
+<?php include __DIR__ . '/../header_tutor.view.php'; ?>
+</header>
     <div class="container">
         
     <div class="sidebar">
-        <img src="../../assets/images/dashboard.png" alt="Centered images"  width="50" height="50" style="margin-top: 30px; "  style="background-color: pink;">
+        <img src="<?= ROOT?>/assets/images/dashboard.png" alt="Centered images"  width="50" height="50" style="margin-top: 30px; "  style="background-color: pink;">
         <ul>
         <div class="sidebar1">
 
@@ -149,6 +147,6 @@ if (!isset($_SESSION['user_id'])) {
         </section>
         </main>
     </div>
-    <?php include '../footer.php'; ?>
+    <?php include __DIR__ . '/../footer.view.php'; ?>
 </body>
 </html>

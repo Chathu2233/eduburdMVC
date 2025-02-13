@@ -1,12 +1,11 @@
 <?php
 
-class Footer
+class Addassignment
 {
-    use Controller;
     public function index()
     {
-        // Render the header_guest.view.php file
-        $this->view("footer");
+        
+        $this->view("/tutor/addassignment");
     }
 
     private function view($viewName)

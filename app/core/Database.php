@@ -69,19 +69,35 @@ trait Database
      * @return bool True on success, false otherwise.
      */
     public function insert($table, $data)
-    {
-        $columns = implode(", ", array_keys($data));
-        $placeholders = implode(", ", array_fill(0, count($data), "?"));
-        $query = "INSERT INTO {$table} ({$columns}) VALUES ({$placeholders})";
-
-        try {
-            $con = $this->connect();
-            $stm = $con->prepare($query);
-            return $stm->execute(array_values($data));
-        } catch (PDOException $e) {
-            die("Insert failed: " . $e->getMessage());
-        }
+{
+    // Make sure data is passed correctly
+    if (empty($data)) {
+        die("No data to insert!");
     }
+
+    // Dynamically get columns and placeholders
+    $columns = implode(", ", array_keys($data)); // Get column names (keys of $data)
+    $placeholders = implode(", ", array_fill(0, count($data), "?")); // Create placeholder for values
+
+    // Construct the INSERT query
+    $query = "INSERT INTO {$table} ({$columns}) VALUES ({$placeholders})";
+
+    // Debugging output
+    echo "Query: " . $query . "\n";
+    echo "Data: " . implode(", ", $data) . "\n";
+
+    try {
+        // Get a valid database connection
+        $con = $this->connect();
+        $stm = $con->prepare($query);
+
+        // Execute the query with the data array
+        return $stm->execute(array_values($data)); // Execute with the values from the array
+    } catch (PDOException $e) {
+        die("Insert failed: " . $e->getMessage());
+    }
+}
+
 
     /**
      * Update data in a table.

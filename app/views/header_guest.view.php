@@ -24,12 +24,12 @@
                 <li><a href="<?=ROOT?>/Findatutor">Find A Tutor</a></li>
                 <li><a href="<?=ROOT?>/tutor/Tutorsignup">Become A Tutor</a></li>
                 <li><a href="<?=ROOT?>/Aboutus">About Us</a></li>
-                <li><a href="<?=ROOT?>/Footer">Contact</a></li>
+                <li><a href="#contact">Contact</a></li>
 
             </ul>
         </nav>
         <div class="auth-buttons">
-            <a href="p" class="login-btn">Login</a>
+            <a href="<?= ROOT ?>/Login" class="login-btn">Login</a>
             <a href="<?= ROOT ?>/Signupmenu" class="signup-btn">Signup</a>
         </div>
     </header>

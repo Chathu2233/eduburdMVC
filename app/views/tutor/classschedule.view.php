@@ -1,10 +1,11 @@
 
 <?php
 
-    session_start();
-    // Include the database connection
-    require '../Database.php';
-    require '../config.php';
+ 
+    // // Include the database connection
+    // require '../Database.php';
+    // require '../config.php';
+ 
 
 
     class TutorialDashboard {
@@ -47,21 +48,16 @@ $tutorials = $dashboard->fetchTutorials();
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
   
-    <link rel="stylesheet" href="../../assets/css/Tutor/classschedule.css">
-    <link rel="stylesheet" href="../../assets/css/Tutor/student_progress.css">
+    <link rel="stylesheet" href="<?= ROOT?>/assets/css/Tutor/classschedule.css">
+    <link rel="stylesheet" href="<?= ROOT?>/assets/css/Tutor/student_progress.css">
   
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js CDN -->
 </head>
 <body>
 
-    <!-- Header Section -->
-
-    <header>
-        <<?php
-    include '../header_tutor.php'
-    ?>
-    </header>
-
+<header>
+<?php include __DIR__ . '/../header_tutor.view.php'; ?>
+</header>
 
 
  <!-- Content Section -->
@@ -75,7 +71,7 @@ $tutorials = $dashboard->fetchTutorials();
         
     <div class="dashboard-container">
         <div class="sidebar">
-        <img src="../../assets/images/dashboard.png" alt="Centered images"  width="50" height="50" style="margin-top: 30px; "  style="background-color: pink;">
+        <img src="<?= ROOT?>/assets/images/dashboard.png" alt="Centered images"  width="50" height="50" style="margin-top: 30px; "  style="background-color: pink;">
         <ul>
         <div class="sidebar1">
             <li><a href="my_account.php"><i class="fas fa-user"></i> My Profile</a></li>
@@ -184,7 +180,7 @@ $tutorials = $dashboard->fetchTutorials();
     <div id="view-progress" class="tab-content">
         <!-- Student Info -->
         <section class="student-info">
-            <img src="../../assets/images/student.jpg" alt="Student Profile" class="student-avatar">
+            <img src="<?= ROOT?>/assets/images/student.jpg" alt="Student Profile" class="student-avatar">
             <div class="student-details">
                 <h1>Ayathma Amanethmi</h1>
                 <p><strong>Grade:</strong> 10</p>
@@ -247,8 +243,7 @@ $tutorials = $dashboard->fetchTutorials();
 </html>
 
     </body>
-<!-- Footer -->
-<?php include '../footer.php'; ?>
+    <?php include __DIR__ . '/../footer.view.php'; ?>
     <script>
         
 // Select all tab buttons and content sections
